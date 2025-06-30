@@ -10,6 +10,7 @@ import torch.nn as nn
 from datetime import datetime
 from enhanced_vae import DynamicVAE
 from dataset import UniversalImageDataset
+import argparse
 
 class VAETrainer:
     def __init__(self, config):
@@ -209,27 +210,18 @@ class VAETrainer:
                   f"LR: {self.optimizer.param_groups[0]['lr']:.2e}")
 
 if __name__ == "__main__":
-    config = {
-        'input_height': 28,
-        'input_width': 28,
-        'encoder_channels': [32, 64, 128],
-        'decoder_channels': [128, 64, 32],
-        'latent_dim': 20,
-        'batch_size': 128,
-        'lr': 1e-3,
-        'weight_decay': 1e-5,
-        'grad_clip': 1.0,
-        'epochs': 100,
-        'data_path': "/home/nightstalker/Projects/ml/vae/train",
-        'image_mode': 'grayscale',
-        'log_interval': 10,
-        'image_log_interval': 5,
-        'project_name': 'VAE-Training',
-        'tags': ['grayscale', 'beta-vae'],
-        'save_dir': './vae_checkpoints',
-        'use_dataparallel': True,
-        'num_workers': 4
-    }
+    parser = argparse.ArgumentParser(description="Train a Dynamic VAE model.")
+    parser.add_argument('--config', type=str, default='configs/vae_config.json',
+                        help='Path to the JSON configuration file.')
+    args = parser.parse_args()
+
+    # Load configuration from the specified JSON file
+    config_path = args.config
+    if not os.path.exists(config_path):
+        raise FileNotFoundError(f"Configuration file not found at: {config_path}")
+
+    with open(config_path, 'r') as f:
+        config = json.load(f)
 
     os.makedirs(config['save_dir'], exist_ok=True)
     trainer = VAETrainer(config)
