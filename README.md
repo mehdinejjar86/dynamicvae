@@ -19,7 +19,6 @@ A Variational Autoencoder (VAE) incorporating residual connections and self-atte
 
 ### Prerequisites
 
-- Python 3.x
 - PyTorch
 
 ### Installation
@@ -27,7 +26,6 @@ A Variational Autoencoder (VAE) incorporating residual connections and self-atte
 ```bash
 git clone https://github.com/yourusername/your-vae-repo.git
 cd your-vae-repo
-pip install -r requirements.txt
 ```
 
 ## 🛠 Usage
@@ -37,7 +35,7 @@ pip install -r requirements.txt
 To train the model, prepare your dataset as specified in dataset.py and run:
 
 ```bash
-python train.py --config configs/default_config.json
+python run_vae.py --config configs/default_config.json
 ```
 
 Example configs/default_config.json:
