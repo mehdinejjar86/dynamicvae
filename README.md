@@ -65,3 +65,7 @@ Example configs/default_config.json:
   "kld_weight": 0.5
 }
 ```
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](license.md) file for details.
