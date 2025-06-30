@@ -1,0 +1,23 @@
+{
+  "input_height": 128,
+  "input_width": 128,
+  "encoder_channels": [32, 64, 128, 256],
+  "decoder_channels": [256, 128, 64, 32],
+  "latent_dim": 512,
+  "batch_size": 128,
+  "lr": 1e-3,
+  "weight_decay": 1e-5,
+  "grad_clip": 1.0,
+  "epochs": 100,
+  "data_path": "./data/your_images",
+  "image_mode": "grayscale",
+  "log_interval": 10,
+  "image_log_interval": 15,
+  "project_name": "VAE-Training",
+  "tags": ["grayscale", "beta-vae"],
+  "save_dir": "./vae_checkpoints",
+  "use_dataparallel": true,
+  "num_workers": 4,
+  "perceptual_weight": 0.1,
+  "kld_weight": 0.5
+}
