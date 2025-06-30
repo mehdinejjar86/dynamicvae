@@ -121,8 +121,9 @@ class DynamicVAE(nn.Module):
         KLD = -0.5 * torch.sum(1 + logvar - mu.pow(2) - logvar.exp())
         return BCE + KLD
 
-# Example with non-square image
+
 if __name__ == "__main__":
+    # Example with non-square image
     # 28x30 input example
     vae = DynamicVAE(
         input_height=28,
