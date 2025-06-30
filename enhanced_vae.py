@@ -326,14 +326,11 @@ class DynamicVAE(nn.Module):
 
         total_loss = bce_loss + perceptual_weight * perceptual_loss + kld_weight * kld_loss
 
-        # Add check for NaN/Inf in final loss
         if not torch.isfinite(total_loss):
             print("Warning: Loss became NaN or Inf.")
             print(f"  BCE Loss: {bce_loss.item()}")
             print(f"  Perceptual Loss: {perceptual_loss.item() if isinstance(perceptual_loss, torch.Tensor) else perceptual_loss}")
             print(f"  KLD Loss: {kld_loss.item()}")
-            # Handle NaN loss, e.g., return a large finite number or zero, or raise error
-            # total_loss = torch.tensor(1e9, device=x.device) # Example: return large number
 
         return total_loss
 
