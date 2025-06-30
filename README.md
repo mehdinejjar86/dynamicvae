@@ -1,9 +1,9 @@
-# Your Awesome Dynamic VAE
+Dynamic VAE
 <p align="center">
   <img src="path/to/reconstructions.png" alt="Reconstructions Grid" width="600"/>
 </p>
 
-A novel Variational Autoencoder (VAE) incorporating residual connections and self-attention mechanisms for enhanced image generation and reconstruction.
+A Variational Autoencoder (VAE) incorporating residual connections and self-attention mechanisms for enhanced image generation and reconstruction.
 
 ## ✨ Features
 * **Dynamic Architecture:** Easily configure encoder/decoder channel depths.
@@ -18,7 +18,6 @@ A novel Variational Autoencoder (VAE) incorporating residual connections and sel
 ### Prerequisites
 * Python 3.x
 * PyTorch
-* ...
 
 ### Installation
 ```bash
