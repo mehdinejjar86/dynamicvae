@@ -1,6 +1,6 @@
 # Dynamic VAE
 <p align="center">
-  <img src="path/to/reconstructions.png" alt="Reconstructions Grid" width="600"/>
+  <img src="image/grid.png" alt="Reconstructions Grid" width="600"/>
 </p>
 
 A Variational Autoencoder (VAE) incorporating residual connections and self-attention mechanisms for enhanced image generation and reconstruction.
