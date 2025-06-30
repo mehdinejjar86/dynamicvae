@@ -184,7 +184,6 @@ class DynamicVAE(nn.Module):
             vgg[0] = new_layer # Replace the first conv layer
         elif self.input_channels != 3:
              print(f"Warning: Perceptual network (VGG16) expects 3 input channels, but got {self.input_channels}. Using first conv layer as is.")
-             # Or raise an error if 3 channels are strictly required
 
         return vgg
 
