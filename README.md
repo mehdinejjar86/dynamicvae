@@ -1,4 +1,4 @@
-Dynamic VAE
+# Dynamic VAE
 <p align="center">
   <img src="path/to/reconstructions.png" alt="Reconstructions Grid" width="600"/>
 </p>
@@ -51,7 +51,7 @@ Example configs/default_config.json:
   "data_path": "./data/your_images",
   "image_mode": "grayscale",
   "log_interval": 10,
-  "image_log_interval": 5,
+  "image_log_interval": 15,
   "project_name": "VAE-Training",
   "tags": ["grayscale", "beta-vae"],
   "save_dir": "./vae_checkpoints",
