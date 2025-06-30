@@ -4,8 +4,6 @@ import torch.nn.functional as F
 from torchvision.models import vgg16, VGG16_Weights
 import math
 
-# --- Reusing components from your original code ---
-
 class ResidualBlock(nn.Module):
     """
     A standard Residual Block for convolutional networks.
@@ -32,12 +30,9 @@ class AttentionBlock(nn.Module):
     """
     def __init__(self, in_channels):
         super().__init__()
-        # Query, Key, Value convolutions for attention mechanism
         self.query = nn.Conv2d(in_channels, in_channels // 8, 1)
         self.key = nn.Conv2d(in_channels, in_channels // 8, 1)
         self.value = nn.Conv2d(in_channels, in_channels, 1)
-        
-        # Learnable parameter for scaling the attention output
         self.gamma = nn.Parameter(torch.zeros(1))
 
     def forward(self, x):

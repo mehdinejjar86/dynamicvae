@@ -9,7 +9,7 @@ import numpy as np
 from tqdm import tqdm
 from torch.utils.data import DataLoader, random_split
 from dataset import UniversalImageDataset  
-from vqvae import DynamicVQVAE  
+from enhanced_vqvae import DynamicVQVAE  
 from datetime import datetime
 import argparse
 
