@@ -9,7 +9,7 @@ import numpy as np
 from tqdm import tqdm
 from torch.utils.data import DataLoader, random_split
 from dataset import UniversalImageDataset  
-from vq_vae import DynamicVQVAE  
+from vqvae import DynamicVQVAE  
 from datetime import datetime
 import argparse
 
@@ -198,7 +198,7 @@ class VQVAETrainer:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Train a Dynamic VAE model.")
-    parser.add_argument('--config', type=str, default='configs/vae_config.json',
+    parser.add_argument('--config', type=str, default='configs/vqvae_config.json',
                         help='Path to the JSON configuration file.')
     args = parser.parse_args()
 

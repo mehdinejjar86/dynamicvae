@@ -8,7 +8,7 @@ from tqdm import tqdm
 import torchvision
 import torch.nn as nn
 from datetime import datetime
-from enhanced_vae import DynamicVAE
+from vae import DynamicVAE
 from dataset import UniversalImageDataset
 import argparse
 
