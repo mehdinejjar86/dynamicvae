@@ -441,33 +441,27 @@ class DynamicVQVAE(nn.Module):
 
 if __name__ == "__main__":
     # Example usage of the EnhancedVQVAE
-    input_h, input_w = 128, 130 # Example non-square input dimensions
-    
-    # Initialize the EnhancedVQVAE model
+    input_h, input_w = 128, 130 
+
     enhanced_vqvae = DynamicVQVAE(
         input_height=input_h,
         input_width=input_w,
-        input_channels=1, # Grayscale image
-        encoder_channels=[32, 64, 128, 256], # Channels for encoder blocks
-        decoder_channels=[256, 128, 64, 32], # Channels for decoder blocks
-        num_embeddings=512,      # Number of codebook vectors
-        embedding_dim=256,       # Dimension of each codebook vector
-        commitment_cost=0.25,    # Commitment cost for VQ loss
-        use_attention=True,      # Enable Attention Blocks
-        use_residual=True        # Enable Residual Blocks
+        input_channels=1, 
+        encoder_channels=[32, 64, 128, 256],
+        decoder_channels=[256, 128, 64, 32], 
+        num_embeddings=512,     
+        embedding_dim=256,       
+        commitment_cost=0.25,    
+        use_attention=True,      
+        use_residual=True        
     )
 
-    # Create a sample input tensor (batch_size, channels, height, width)
-    sample_input = torch.rand(4, 1, input_h, input_w) # Batch size 4
+    sample_input = torch.rand(4, 1, input_h, input_w) 
 
-    # Perform a forward pass
     recon, vq_loss, z_e, encoding_indices = enhanced_vqvae(sample_input)
 
-    # Calculate the total loss
-    # Note: loss_function now takes vq_loss directly from the forward pass
     loss = enhanced_vqvae.loss_function(recon, sample_input, vq_loss, perceptual_weight=0.1)
 
-    # Print shapes and loss values for verification
     print("Input shape:", sample_input.shape)
     print("Reconstructed shape:", recon.shape)
     print("Encoder (pre-VQ) output shape:", z_e.shape)
@@ -475,13 +469,11 @@ if __name__ == "__main__":
     print("VQ loss:", vq_loss.item())
     print("Calculated Total Loss:", loss.item())
 
-    # Assert that the output shape matches the input shape
     assert recon.shape == sample_input.shape, "Output shape mismatch!"
 
     print("\nModel Summary:")
     print(enhanced_vqvae)
     
-    # Calculate and print total trainable parameters
     num_params = sum(p.numel() for p in enhanced_vqvae.parameters() if p.requires_grad)
     print(f"Total Trainable Parameters: {num_params:,}")
 
