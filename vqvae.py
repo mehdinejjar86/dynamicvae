@@ -35,7 +35,6 @@ class VectorQuantizer(nn.Module):
 
         return quantized, loss, encoding_indices.view(input_shape[0], input_shape[2], input_shape[3])
 
-
 class DynamicVQVAE(nn.Module):
     def __init__(
         self,
