@@ -29,14 +29,14 @@ class AttentionBlock(nn.Module):
     def forward(self, x):
         batch_size, C, H, W = x.size()
        
-        proj_query = self.query(x).view(batch_size, -1, W*H).permute(0, 2, 1) # B x N x C'
-        proj_key = self.key(x).view(batch_size, -1, W*H) # B x C' x N
+        proj_query = self.query(x).reshape(batch_size, -1, W*H).permute(0, 2, 1) # B x N x C'
+        proj_key = self.key(x).reshape(batch_size, -1, W*H) # B x C' x N
         energy = torch.bmm(proj_query, proj_key) # B x N x N
         attention = F.softmax(energy, dim=-1) # B x N x N
-        proj_value = self.value(x).view(batch_size, -1, W*H) # B x C x N
+        proj_value = self.value(x).reshape(batch_size, -1, W*H) # B x C x N
 
         out = torch.bmm(proj_value, attention.permute(0, 2, 1)) # B x C x N
-        out = out.view(batch_size, C, H, W) 
+        out = out.reshape(batch_size, C, H, W) 
 
         out = self.gamma * out + x
         return out
@@ -207,7 +207,7 @@ class DynamicVAE(nn.Module):
         # Project and reshape latent vector
         x = self.decoder_input(z)
         # Reshape to match dimensions expected by the first decoder block (after initial conv)
-        x = x.view(batch_size, self.decoder_channels[0], self.final_dim[0], self.final_dim[1])
+        x = x.reshape(batch_size, self.decoder_channels[0], self.final_dim[0], self.final_dim[1])
 
         # Apply the initial decoder block (before first upsample)
         x = self.decoder_blocks[0](x)

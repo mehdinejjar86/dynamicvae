@@ -13,7 +13,7 @@ class VectorQuantizer(nn.Module):
 
     def forward(self, inputs):
         input_shape = inputs.shape  # (B, C, H, W)
-        flat_input = inputs.permute(0, 2, 3, 1).contiguous().view(-1, self.embedding_dim)
+        flat_input = inputs.permute(0, 2, 3, 1).contiguous().reshape(-1, self.embedding_dim)
 
         distances = (
             torch.sum(flat_input ** 2, dim=1, keepdim=True)
@@ -25,7 +25,7 @@ class VectorQuantizer(nn.Module):
         encodings = F.one_hot(encoding_indices, self.num_embeddings).float()
 
         quantized = torch.matmul(encodings, self.embedding.weight)
-        quantized = quantized.view(input_shape[0], input_shape[2], input_shape[3], -1)
+        quantized = quantized.reshape(input_shape[0], input_shape[2], input_shape[3], -1)
         quantized = quantized.permute(0, 3, 1, 2).contiguous()
 
         e_latent_loss = F.mse_loss(quantized.detach(), inputs)
@@ -33,7 +33,7 @@ class VectorQuantizer(nn.Module):
         loss = q_latent_loss + self.commitment_cost * e_latent_loss
         quantized = inputs + (quantized - inputs).detach()
 
-        return quantized, loss, encoding_indices.view(input_shape[0], input_shape[2], input_shape[3])
+        return quantized, loss, encoding_indices.reshape(input_shape[0], input_shape[2], input_shape[3])
 
 class DynamicVQVAE(nn.Module):
     def __init__(

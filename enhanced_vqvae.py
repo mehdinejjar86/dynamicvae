@@ -40,9 +40,9 @@ class AttentionBlock(nn.Module):
        
         # Reshape query, key, value for matrix multiplication
         # Query: (B, C', H*W) -> (B, H*W, C')
-        proj_query = self.query(x).view(batch_size, -1, W*H).permute(0, 2, 1)
+        proj_query = self.query(x).contiguous().reshape(batch_size, -1, W*H).permute(0, 2, 1)
         # Key: (B, C', H*W)
-        proj_key = self.key(x).view(batch_size, -1, W*H)
+        proj_key = self.key(x).contiguous().reshape(batch_size, -1, W*H)
         
         # Calculate energy (dot product attention)
         energy = torch.bmm(proj_query, proj_key) # (B, H*W, H*W)
@@ -51,13 +51,13 @@ class AttentionBlock(nn.Module):
         attention = F.softmax(energy, dim=-1) # (B, H*W, H*W)
         
         # Reshape value
-        proj_value = self.value(x).view(batch_size, -1, W*H) # (B, C, H*W)
+        proj_value = self.value(x).contiguous().reshape(batch_size, -1, W*H) # (B, C, H*W)
 
         # Apply attention to value
         out = torch.bmm(proj_value, attention.permute(0, 2, 1)) # (B, C, H*W)
         
         # Reshape back to original spatial dimensions
-        out = out.view(batch_size, C, H, W) 
+        out = out.contiguous().reshape(batch_size, C, H, W) 
 
         # Scale and add residual connection
         out = self.gamma * out + x
@@ -85,7 +85,7 @@ class VectorQuantizer(nn.Module):
         
         # Flatten input for distance calculation: (B*H*W, embedding_dim)
         # Permute to (B, H, W, C) then flatten to (B*H*W, C)
-        flat_input = inputs.permute(0, 2, 3, 1).contiguous().view(-1, self.embedding_dim)
+        flat_input = inputs.permute(0, 2, 3, 1).contiguous().reshape(-1, self.embedding_dim)
 
         # Calculate L2 distances between flattened input vectors and all codebook embeddings
         # ||x - y||^2 = ||x||^2 + ||y||^2 - 2x^T y
@@ -106,7 +106,7 @@ class VectorQuantizer(nn.Module):
         quantized = torch.matmul(encodings, self.embedding.weight)
         
         # Reshape quantized output back to original spatial dimensions: (B, H, W, C)
-        quantized = quantized.view(input_shape[0], input_shape[2], input_shape[3], -1)
+        quantized = quantized.contiguous().reshape(input_shape[0], input_shape[2], input_shape[3], -1)
         # Permute back to (B, C, H, W)
         quantized = quantized.permute(0, 3, 1, 2).contiguous()
 
@@ -128,7 +128,7 @@ class VectorQuantizer(nn.Module):
         quantized = inputs + (quantized - inputs).detach()
 
         # Return quantized output, VQ loss, and the encoding indices (reshaped to spatial)
-        return quantized, loss, encoding_indices.view(input_shape[0], input_shape[2], input_shape[3])
+        return quantized, loss, encoding_indices.contiguous().reshape(input_shape[0], input_shape[2], input_shape[3])
 
 
 class DynamicVQVAE(nn.Module):
@@ -417,7 +417,7 @@ class DynamicVQVAE(nn.Module):
             try:
                  with torch.no_grad(): # Do not calculate gradients for VGG features
                      real_features = self.perceptual_net(x_vgg)
-                 recon_features = self.perceptual_net(recon_x_vgg)
+                     recon_features = self.perceptual_net(recon_x_vgg)
                  perceptual_loss = F.mse_loss(recon_features, real_features, reduction='mean')
             except Exception as e:
                  print(f"Error during perceptual network forward pass: {e}. Setting perceptual loss to 0.")

@@ -101,7 +101,7 @@ class DynamicVAE(nn.Module):
 
     def decode(self, z):
         x = self.decoder_input(z)
-        x = x.view(-1, self.decoder_channels[0], *self.final_dim)
+        x = x.reshape(-1, self.decoder_channels[0], *self.final_dim)
         x = self.decoder(x)
         return x
 

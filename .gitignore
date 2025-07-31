@@ -3,3 +3,4 @@ train/
 *_checkpoints/
 wandb/
 *pycache*
+.DS_Store
