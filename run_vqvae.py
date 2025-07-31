@@ -9,7 +9,7 @@ import numpy as np
 from tqdm import tqdm
 from torch.utils.data import DataLoader, random_split
 from dataset import UniversalImageDataset  
-from enhanced_vqvae import DynamicVQVAE  
+ 
 from datetime import datetime
 import argparse
 
@@ -21,7 +21,12 @@ class VQVAETrainer:
         os.makedirs(self.path, exist_ok=True)
         self.device = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")
         print(f"Using device: {self.device}")
-
+        if args.enhanced:
+            from enhanced_vqvae import DynamicVQVAE
+            print("Using Enhanced VQVAE")
+        else:
+            from vqvae import DynamicVQVAE
+            print("Using Standard VQVAE")
         self.model = DynamicVQVAE(
             input_channels=1,
             input_height=config['input_height'],
@@ -200,6 +205,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Train a Dynamic VAE model.")
     parser.add_argument('--config', type=str, default='configs/vqvae_config.json',
                         help='Path to the JSON configuration file.')
+    parser.add_argument('--enhanced', action='store_true',
+                        help='Use enhanced VQVAE with additional features.')
     args = parser.parse_args()
 
     # Load configuration from the specified JSON file

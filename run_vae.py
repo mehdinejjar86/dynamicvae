@@ -8,7 +8,7 @@ from tqdm import tqdm
 import torchvision
 import torch.nn as nn
 from datetime import datetime
-from enhanced_vae import DynamicVAE
+
 from dataset import UniversalImageDataset
 import argparse
 
@@ -21,7 +21,12 @@ class VAETrainer:
         self.time = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         self.checkpoint_dir = os.path.join(config['save_dir'], self.time)
         os.makedirs(self.checkpoint_dir, exist_ok=True)
-
+        if args.enhanced:
+            from enhanced_vae import DynamicVAE
+            print("Using Enhanced VAE")
+        else:
+            from vae import DynamicVAE
+            print("Using Standard VAE")
         self.model = DynamicVAE(
             input_height=config['input_height'],
             input_width=config['input_width'],
@@ -213,6 +218,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Train a Dynamic VAE model.")
     parser.add_argument('--config', type=str, default='configs/vae_config.json',
                         help='Path to the JSON configuration file.')
+    parser.add_argument('--enhanced', action='store_true',
+                        help='Use enhanced VAE with additional features.')
     args = parser.parse_args()
 
     # Load configuration from the specified JSON file
